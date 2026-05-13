@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>出張報告(PC用)</title>
+
+<style>
+body { font-family: sans-serif; font-size: 16px; }
+
+.section {
+  border: 1px solid #ccc;
+  padding: 10px;
+  margin: 15px 0;
+}
+
+label {
+  font-weight: bold;
+  display: block;
+  margin-top: 8px;
+}
+
+input, textarea {
+  width: 100%;
+  font-size: 16px;
+  box-sizing: border-box;
+}
+
+textarea { min-height: 90px; }
+
+button {
+  width: 100%;
+  font-size: 16px;
+  padding: 10px;
+  margin-top: 10px;
+}
+
+.required { color:red; }
+.day-title { font-weight:bold; margin-top:10px; }
+.notice { color:red; font-weight:bold; }
+
+</style>
+
+<script>
+let visibleDays = 1;
+
+function showNextDay(){
+  if(visibleDays>=7)return;
+  visibleDays++;
+  document.getElementById("day"+visibleDays).style.display="block";
+}
+
+function getDateLabel(){
+  let first = document.getElementById("d1").value;
+  let last = first;
+
+  for(let i=2;i<=visibleDays;i++){
+    let d = document.getElementById("d"+i).value;
+    if(d) last=d;
+  }
+  if(!first) return "";
+  if(first===last) return first;
+  return first+"～"+last;
+}
+
+function buildReport(){
+
+  let days="";
+  for(let i=1;i<=visibleDays;i++){
+    let d=document.getElementById("d"+i).value;
+    let s=document.getElementById("s"+i).value;
+    let e=document.getElementById("e"+i).value;
+
+    if(d||s||e){
+      days+=`・${d||""}　${s||""}～${e||""}\n`;
+    }
+  }
+
+  return `各位
+お疲れ様です。出張報告いたします。
+${customerEl.value} ${modelEl.value} ${workNoEl.value} ${equipEl.value}
+
+【出張先情報】
+お客様名（会社名）：${customerEl.value}
+ご担当者名：${contactEl.value}
+
+【作業者】
+作業者氏名：${workerEl.value}
+
+【日別作業実績】
+${days}
+
+【作業内容・不具合内容（簡易説明）】
+${summaryEl.value}
+
+【作業内容・不具合内容（詳細）】
+${detailEl.value}
+
+【備考】
+${noteEl.value}
+`;
+}
+
+function generateReport(){
+
+  if(!customerEl.value.trim()){ alert("お客様名未入力"); return;}
+  if(!workerEl.value.trim()){ alert("作業者未入力"); return;}
+  if(!summaryEl.value.trim()){ alert("簡易説明未入力"); return;}
+
+  reportArea.value = buildReport();
+}
+
+function sendMail(){
+
+  generateReport();
+
+  let subject =
+    customerEl.value+" "+
+    equipEl.value+" "+
+    workerEl.value+" "+
+    getDateLabel();
+
+  location.href =
+"mailto:jdkk-service@yamato-scale.co.jp"+
+"?subject="+encodeURIComponent(subject)+
+"&body="+encodeURIComponent(reportArea.value);
+}
+
+function copyReport(){
+  reportArea.select();
+  document.execCommand("copy");
+}
+</script>
+</head>
+
+<body>
+
+<h2>出張報告</h2>
+
+<div class="section">
+
+<label>お客様名（会社名）<span class="required">※必須</span></label>
+<input id="customerEl">
+
+<label>ご担当者名</label>
+<input id="contactEl">
+
+<label>品名／形式</label>
+<input id="modelEl">
+
+<label>作業製番</label>
+<input id="workNoEl">
+
+<label>器物番号（製番）</label>
+<input id="equipEl">
+
+<label>作業者氏名<span class="required">※必須</span></label>
+<input id="workerEl">
+
+</div>
+
+<div class="section">
+
+<h3>日別作業実績</h3>
+
+<div id="day1">
+<div class="day-title">【1日目】</div>
+
+<label>作業日</label>
+<input id="d1" type="date">
+
+<label>作業開始時間</label>
+<input id="s1" type="time">
+
+<label>作業終了時間</label>
+<input id="e1" type="time">
+</div>
+
+<button onclick="showNextDay()">＋ 2日目以降を表示</button>
+
+<div id="day2" style="display:none;">
+<div class="day-title">【2日目】</div>
+<label>作業日</label>
+<input id="d2" type="date">
+<label>作業開始時間</label>
+<input id="s2" type="time">
+<label>作業終了時間</label>
+<input id="e2" type="time">
+</div>
+
+<div id="day3" style="display:none;">
+<div class="day-title">【3日目】</div>
+<input id="d3" type="date">
+<input id="s3" type="time">
+<input id="e3" type="time">
+</div>
+
+<div id="day4" style="display:none;">
+<div class="day-title">【4日目】</div>
+<input id="d4" type="date">
+<input id="s4" type="time">
+<input id="e4" type="time">
+</div>
+
+<div id="day5" style="display:none;">
+<div class="day-title">【5日目】</div>
+<input id="d5" type="date">
+<input id="s5" type="time">
+<input id="e5" type="time">
+</div>
+
+<div id="day6" style="display:none;">
+<div class="day-title">【6日目】</div>
+<input id="d6" type="date">
+<input id="s6" type="time">
+<input id="e6" type="time">
+</div>
+
+<div id="day7" style="display:none;">
+<div class="day-title">【7日目】</div>
+<input id="d7" type="date">
+<input id="s7" type="time">
+<input id="e7" type="time">
+</div>
+
+</div>
+
+<div class="section">
+
+<label>作業内容・不具合内容（簡易説明）<span class="required">※必須</span></label>
+<textarea id="summaryEl"></textarea>
+
+<label>作業内容・不具合内容（詳細）</label>
+<textarea id="detailEl"></textarea>
+
+<label>備考</label>
+<textarea id="noteEl"></textarea>
+
+</div>
+
+<button onclick="generateReport()">報告書全生成</button>
+<button onclick="copyReport()">コピー</button>
+<button onclick="sendMail()">メール作成</button>
+
+<p class="notice">
+※ Windows11の場合<br>
+「メール作成」ボタンを押して いつもの Outlook で開かない場合は、<br>
+設定 → アプリ → 既定のアプリ → Outlook（デスクトップ版、アイコンが同じやつ）で<br>
+MAILTO を Outlook に設定してください。
+</p>
+
+<div class="section">
+<textarea id="reportArea" rows="16"></textarea>
+</div>
+
+</body>
+</html>
