@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>出張報告(PC用)</title>
+<title>出張報告</title>
 
 <style>
 body { font-family: sans-serif; font-size: 16px; }
@@ -53,7 +53,6 @@ function showNextDay(){
 function getDateLabel(){
   let first = document.getElementById("d1").value;
   let last = first;
-
   for(let i=2;i<=visibleDays;i++){
     let d = document.getElementById("d"+i).value;
     if(d) last=d;
@@ -64,13 +63,11 @@ function getDateLabel(){
 }
 
 function buildReport(){
-
   let days="";
   for(let i=1;i<=visibleDays;i++){
     let d=document.getElementById("d"+i).value;
     let s=document.getElementById("s"+i).value;
     let e=document.getElementById("e"+i).value;
-
     if(d||s||e){
       days+=`・${d||""}　${s||""}～${e||""}\n`;
     }
@@ -102,7 +99,6 @@ ${noteEl.value}
 }
 
 function generateReport(){
-
   if(!customerEl.value.trim()){ alert("お客様名未入力"); return;}
   if(!workerEl.value.trim()){ alert("作業者未入力"); return;}
   if(!summaryEl.value.trim()){ alert("簡易説明未入力"); return;}
@@ -111,7 +107,6 @@ function generateReport(){
 }
 
 function sendMail(){
-
   generateReport();
 
   let subject =
@@ -121,14 +116,23 @@ function sendMail(){
     getDateLabel();
 
   location.href =
-"mailto:"+
+"mailto:" +
 "?subject="+encodeURIComponent(subject)+
 "&body="+encodeURIComponent(reportArea.value);
 }
 
-function copyReport(){
-  reportArea.select();
-  document.execCommand("copy");
+/* ✅ 修正済：全文コピー完全対応 */
+function copyReport() {
+  const text = reportArea.value;
+
+  navigator.clipboard.writeText(text)
+    .then(() => {
+      alert("コピーしました");
+    })
+    .catch(() => {
+      reportArea.select();
+      document.execCommand("copy");
+    });
 }
 </script>
 </head>
