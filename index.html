@@ -53,21 +53,25 @@ function showNextDay(){
 function getDateLabel(){
   let first = document.getElementById("d1").value;
   let last = first;
+
   for(let i=2;i<=visibleDays;i++){
     let d = document.getElementById("d"+i).value;
     if(d) last=d;
   }
+
   if(!first) return "";
   if(first===last) return first;
   return first+"～"+last;
 }
 
 function buildReport(){
+
   let days="";
   for(let i=1;i<=visibleDays;i++){
     let d=document.getElementById("d"+i).value;
     let s=document.getElementById("s"+i).value;
     let e=document.getElementById("e"+i).value;
+
     if(d||s||e){
       days+=`・${d||""}　${s||""}～${e||""}\n`;
     }
@@ -75,11 +79,15 @@ function buildReport(){
 
   return `各位
 お疲れ様です。出張報告いたします。
-${customerEl.value} ${modelEl.value} ${workNoEl.value} ${equipEl.value}
 
 【出張先情報】
 お客様名（会社名）：${customerEl.value}
 ご担当者名：${contactEl.value}
+
+【対象機器】
+品名／形式：${modelEl.value}
+作業製番：${workNoEl.value}
+器物番号（製番）：${equipEl.value}
 
 【作業者】
 作業者氏名：${workerEl.value}
@@ -99,6 +107,7 @@ ${noteEl.value}
 }
 
 function generateReport(){
+
   if(!customerEl.value.trim()){ alert("お客様名未入力"); return;}
   if(!workerEl.value.trim()){ alert("作業者未入力"); return;}
   if(!summaryEl.value.trim()){ alert("簡易説明未入力"); return;}
@@ -107,12 +116,14 @@ function generateReport(){
 }
 
 function sendMail(){
+
   generateReport();
 
   let subject =
-    customerEl.value+" "+
-    equipEl.value+" "+
-    workerEl.value+" "+
+    customerEl.value + " " +
+    modelEl.value + " " +
+    equipEl.value + " " +
+    workerEl.value + " " +
     getDateLabel();
 
   location.href =
@@ -121,7 +132,7 @@ function sendMail(){
 "&body="+encodeURIComponent(reportArea.value);
 }
 
-/* ✅ 修正済：全文コピー完全対応 */
+/* ✅ 完全コピー対応 */
 function copyReport() {
   const text = reportArea.value;
 
@@ -184,11 +195,8 @@ function copyReport() {
 
 <div id="day2" style="display:none;">
 <div class="day-title">【2日目】</div>
-<label>作業日</label>
 <input id="d2" type="date">
-<label>作業開始時間</label>
 <input id="s2" type="time">
-<label>作業終了時間</label>
 <input id="e2" type="time">
 </div>
 
