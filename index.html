@@ -53,25 +53,21 @@ function showNextDay(){
 function getDateLabel(){
   let first = document.getElementById("d1").value;
   let last = first;
-
   for(let i=2;i<=visibleDays;i++){
     let d = document.getElementById("d"+i).value;
     if(d) last=d;
   }
-
   if(!first) return "";
   if(first===last) return first;
   return first+"～"+last;
 }
 
 function buildReport(){
-
   let days="";
   for(let i=1;i<=visibleDays;i++){
     let d=document.getElementById("d"+i).value;
     let s=document.getElementById("s"+i).value;
     let e=document.getElementById("e"+i).value;
-
     if(d||s||e){
       days+=`・${d||""}　${s||""}～${e||""}\n`;
     }
@@ -79,6 +75,7 @@ function buildReport(){
 
   return `各位
 お疲れ様です。出張報告いたします。
+${customerEl.value} ${modelEl.value} ${equipEl.value} ${workerEl.value}
 
 【出張先情報】
 お客様名（会社名）：${customerEl.value}
@@ -107,16 +104,13 @@ ${noteEl.value}
 }
 
 function generateReport(){
-
   if(!customerEl.value.trim()){ alert("お客様名未入力"); return;}
   if(!workerEl.value.trim()){ alert("作業者未入力"); return;}
   if(!summaryEl.value.trim()){ alert("簡易説明未入力"); return;}
-
   reportArea.value = buildReport();
 }
 
 function sendMail(){
-
   generateReport();
 
   let subject =
@@ -132,7 +126,6 @@ function sendMail(){
 "&body="+encodeURIComponent(reportArea.value);
 }
 
-/* ✅ 完全コピー対応 */
 function copyReport() {
   const text = reportArea.value;
 
@@ -267,3 +260,4 @@ MAILTO を Outlook に設定してください。
 
 </body>
 </html>
+``
